@@ -1,5 +1,5 @@
 (() => {
-  const STORAGE_KEY = "abss_quiz_used_v1";
+  const GAME_KEY = "quiz";
   const board = document.getElementById("board");
   const overlay = document.getElementById("modal-overlay");
   const modalPts = document.getElementById("modal-pts");
@@ -10,14 +10,11 @@
   const closeBtn = document.getElementById("close-btn");
 
   function loadUsed() {
-    try {
-      return JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || [];
-    } catch (e) {
-      return [];
-    }
+    const saved = AbssState.load(GAME_KEY);
+    return (saved && Array.isArray(saved.used)) ? saved.used : [];
   }
   function saveUsed(used) {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(used));
+    AbssState.save(GAME_KEY, { used });
   }
 
   let used = loadUsed();
@@ -111,4 +108,5 @@
   });
 
   renderBoard();
+  AbssMenu.init({ gameKey: GAME_KEY, gameLabel: "智慧问答大赛" });
 })();

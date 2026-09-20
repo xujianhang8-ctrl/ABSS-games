@@ -1,4 +1,5 @@
 (() => {
+  const GAME_KEY = "timeline";
   const N = TIMELINE_DATA.length;
   let placed = new Array(N).fill(null); // slot index -> original data index
   let bankOrder = [];
@@ -20,12 +21,37 @@
     return a;
   }
 
+  function persist() {
+    AbssState.save(GAME_KEY, { placed, bankOrder, checked });
+  }
+
   function newShuffle() {
     bankOrder = shuffle(TIMELINE_DATA.map((_, i) => i));
     placed = new Array(N).fill(null);
     checked = false;
     awardRow.innerHTML = "";
     render();
+  }
+
+  function loadSaved() {
+    const saved = AbssState.load(GAME_KEY);
+    const valid =
+      saved &&
+      Array.isArray(saved.placed) &&
+      saved.placed.length === N &&
+      Array.isArray(saved.bankOrder);
+    if (!valid) {
+      newShuffle();
+      return;
+    }
+    placed = saved.placed;
+    bankOrder = saved.bankOrder;
+    checked = !!saved.checked;
+    render();
+    if (checked) {
+      const correctCount = placed.filter((dataIdx, slotIdx) => dataIdx === slotIdx).length;
+      buildAwardRow(correctCount);
+    }
   }
 
   function render() {
@@ -51,6 +77,7 @@
             if (checked) return;
             bankOrder.push(dataIdx);
             placed[slotIdx] = null;
+            persist();
             render();
           });
         }
@@ -71,12 +98,14 @@
         if (emptySlot === -1) return;
         placed[emptySlot] = dataIdx;
         bankOrder = bankOrder.filter((x) => x !== dataIdx);
+        persist();
         render();
       });
       bankEl.appendChild(card);
     });
 
     checkBtn.disabled = placed.includes(null) || checked;
+    persist();
   }
 
   function check() {
@@ -114,5 +143,6 @@
   });
   reshuffleBtn.addEventListener("click", newShuffle);
 
-  newShuffle();
+  loadSaved();
+  AbssMenu.init({ gameKey: GAME_KEY, gameLabel: "佛陀生平时间轴" });
 })();

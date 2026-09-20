@@ -156,26 +156,92 @@ a { text-decoration: none; color: inherit; }
   top: 12px;
   left: 14px;
   z-index: 60;
+  display: flex;
+  gap: 8px;
 }
 
-.flash-correct { animation: flashGreen 0.6s ease; }
-.flash-wrong { animation: flashRed 0.6s ease; }
-@keyframes flashGreen { 0% { background: var(--green-ok); } 100% { background: inherit; } }
-@keyframes flashRed { 0% { background: var(--red-no); } 100% { background: inherit; } }
-
-.pill {
-  display: inline-block;
-  background: var(--gold);
-  color: var(--maroon-dark);
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 0.85rem;
+/* Game menu (hamburger) */
+.menu-btn {
+  position: fixed;
+  top: 12px;
+  right: 14px;
+  z-index: 60;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: none;
+  background: var(--maroon);
+  color: var(--gold);
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
 }
+.menu-btn:hover { background: var(--maroon-dark); }
 
-footer.hint {
-  margin-top: 18px;
-  font-size: 0.85rem;
+.menu-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(58, 36, 22, 0.75);
+  align-items: center; justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+.menu-overlay.open { display: flex; }
+.menu-panel {
+  background: var(--cream);
+  border-radius: var(--radius);
+  padding: 26px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+.menu-panel h2 {
+  color: var(--maroon);
+  text-align: center;
+  margin-bottom: 14px;
+}
+.menu-panel .menu-btn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.menu-panel .menu-btn-list .btn {
+  width: 100%;
+  text-align: center;
+}
+.menu-panel .menu-note {
+  font-size: 0.8rem;
   color: #8a7562;
   text-align: center;
+  margin-top: 12px;
+}
+.menu-panel hr {
+  border: none;
+  border-top: 1px solid #e8c98a;
+  margin: 14px 0;
+}
+
+/* Hub progress badges */
+.game-card { position: relative; }
+.progress-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  color: white;
+}
+.progress-badge.not-started { background: #b8a48c; }
+.progress-badge.in-progress { background: var(--saffron); }
+.progress-badge.completed { background: var(--green-ok); }
+
+.hub-toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 6px 0 4px;
 }

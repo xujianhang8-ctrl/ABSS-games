@@ -9,25 +9,32 @@
 <body>
 <div class="page">
   <h1 class="title">🪷 佛学课堂游戏中心 🪷</h1>
-  <p class="subtitle">选择一个游戏，和全班同学一起玩吧。分数会在每个游戏之间累计——请留意屏幕底部的计分栏。</p>
+  <p class="subtitle">选择一个游戏，和全班同学一起玩吧。分数和进度会自动保存，并在每个游戏之间累计——请留意屏幕底部的计分栏。</p>
 
-  <div class="game-grid">
-    <a class="game-card" href="quiz.html">
+  <div class="hub-toolbar">
+    <button class="btn secondary small" id="new-session-btn">🗓 开始新的一周课程</button>
+    <button class="btn ghost small" id="export-btn">⬇ 保存到文件</button>
+    <button class="btn ghost small" id="import-btn">⬆ 从文件加载</button>
+    <input type="file" id="import-input" accept="application/json" style="display:none" />
+  </div>
+
+  <div class="game-grid" id="game-grid">
+    <a class="game-card" href="quiz.html" data-game="quiz">
       <div class="icon">❓</div>
       <h3>智慧问答大赛</h3>
       <p>类似"危险边缘"的问答板。选择一个类别和分值，各队抢答。</p>
     </a>
-    <a class="game-card" href="truefalse.html">
+    <a class="game-card" href="truefalse.html" data-game="truefalse">
       <div class="icon">⚡</div>
       <h3>是非快问快答</h3>
       <p>关于佛陀和他的教导的快节奏问答。判断对错！</p>
     </a>
-    <a class="game-card" href="timeline.html">
+    <a class="game-card" href="timeline.html" data-game="timeline">
       <div class="icon">📜</div>
       <h3>佛陀生平时间轴</h3>
       <p>一起把佛陀一生中的重要事件按正确的顺序排列出来。</p>
     </a>
-    <a class="game-card" href="wheel.html">
+    <a class="game-card" href="wheel.html" data-game="wheel">
       <div class="icon">🎡</div>
       <h3>幸运转盘</h3>
       <p>随机抽选队伍、发放额外分数，或决定下一个回答问题的人。</p>
@@ -39,8 +46,82 @@
     </a>
   </div>
 
-  <footer class="hint">小提示：在教室的电脑上打开此页面并投影出来——不需要联网。</footer>
+  <footer class="hint">小提示：在教室的电脑上打开此页面并投影出来——不需要联网。你的进度保存在此浏览器中——使用"保存到文件"来备份，或转移到另一台电脑。</footer>
 </div>
 <script src="js/scoreboard.js"></script>
+<script src="js/gamestate.js"></script>
+<script>
+  const QUIZ_TOTAL_CELLS = 20;
+
+  function badgeFor(gameKey) {
+    const state = AbssState.load(gameKey);
+    if (gameKey === "quiz") {
+      const used = (state && state.used) ? state.used.length : 0;
+      if (used === 0) return null;
+      if (used >= QUIZ_TOTAL_CELLS) return { text: "已完成", cls: "completed" };
+      return { text: `已玩 ${used}/${QUIZ_TOTAL_CELLS} 题`, cls: "in-progress" };
+    }
+    if (gameKey === "truefalse") {
+      const answered = (state && state.answeredPositions) ? state.answeredPositions.length : 0;
+      if (answered === 0) return null;
+      const total = (state && state.order) ? state.order.length : answered;
+      if (answered >= total) return { text: "已完成", cls: "completed" };
+      return { text: `已答 ${answered}/${total} 题`, cls: "in-progress" };
+    }
+    if (gameKey === "timeline") {
+      if (!state) return null;
+      if (state.checked) return { text: "已检查", cls: "completed" };
+      const placedCount = (state.placed || []).filter((x) => x !== null).length;
+      if (placedCount === 0) return null;
+      return { text: "进行中", cls: "in-progress" };
+    }
+    if (gameKey === "wheel") {
+      if (state && state.text) return { text: "已自定义", cls: "in-progress" };
+      return null;
+    }
+    return null;
+  }
+
+  function renderBadges() {
+    document.querySelectorAll(".game-card[data-game]").forEach((card) => {
+      const existing = card.querySelector(".progress-badge");
+      if (existing) existing.remove();
+      const badge = badgeFor(card.dataset.game);
+      if (badge) {
+        const span = document.createElement("span");
+        span.className = "progress-badge " + badge.cls;
+        span.textContent = badge.text;
+        card.appendChild(span);
+      }
+    });
+  }
+
+  document.getElementById("new-session-btn").addEventListener("click", () => {
+    if (confirm("开始新的一周课程？这将清除各游戏的进度（问答板、是非题、时间轴、转盘），但会保留你的队伍名称、颜色和分数。")) {
+      AbssState.clearAllProgress();
+      renderBadges();
+    }
+  });
+  document.getElementById("export-btn").addEventListener("click", () => {
+    AbssState.downloadSave();
+  });
+  const importInput = document.getElementById("import-input");
+  document.getElementById("import-btn").addEventListener("click", () => importInput.click());
+  importInput.addEventListener("change", () => {
+    const file = importInput.files[0];
+    if (!file) return;
+    AbssState.loadSaveFromFile(file, (success) => {
+      if (success) {
+        alert("存档已加载！页面即将刷新。");
+        location.reload();
+      } else {
+        alert("抱歉，无法读取该存档文件。");
+      }
+      importInput.value = "";
+    });
+  });
+
+  renderBadges();
+</script>
 </body>
 </html>
