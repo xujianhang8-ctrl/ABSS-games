@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Buddha's Life Timeline</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .slots {
+    display: flex; flex-direction: column; gap: 8px;
+    width: 100%; max-width: 800px; margin-top: 10px;
+  }
+  .slot {
+    display: flex; align-items: center; gap: 12px;
+    background: #fff3dc; border: 2px dashed #e8c98a; border-radius: 12px;
+    padding: 12px 16px; min-height: 46px;
+  }
+  .slot .num { font-weight: 900; color: var(--maroon); width: 1.6em; text-align: center; flex: none; }
+  .slot .content { flex: 1; font-size: 1.02rem; }
+  .slot.correct { border-style: solid; border-color: var(--green-ok); background: #e9f9ee; }
+  .slot.incorrect { border-style: solid; border-color: var(--red-no); background: #fdeceb; }
+  .slot .note { display: none; font-size: 0.88rem; color: #6a5748; margin-top: 4px; }
+  .slot.revealed .note { display: block; }
+
+  .bank {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    width: 100%; max-width: 800px; margin-top: 18px;
+  }
+  .card-item {
+    background: var(--saffron); color: white; font-weight: 700;
+    padding: 10px 16px; border-radius: 12px; cursor: pointer; box-shadow: var(--shadow);
+    max-width: 320px; font-size: 0.95rem;
+  }
+  .card-item:hover { background: var(--saffron-dark); transform: translateY(-2px); }
+  .actions-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin: 22px 0; }
+  .award-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; Hub</a></div>
+<div class="page">
+  <h1 class="title">📜 Buddha's Life Timeline</h1>
+  <p class="subtitle">Click the events below in the order you think they happened. When everyone agrees, check the order!</p>
+
+  <div class="slots" id="slots"></div>
+  <div class="bank" id="bank"></div>
+
+  <div class="actions-row">
+    <button class="btn" id="check-btn">Check Order</button>
+    <button class="btn secondary" id="reset-btn">Reset</button>
+    <button class="btn ghost" id="reshuffle-btn">New Shuffle</button>
+  </div>
+  <div class="award-row" id="award-row"></div>
+</div>
+
+<script src="data/timeline-data.js"></script>
+<script src="js/scoreboard.js"></script>
+<script src="js/timeline.js"></script>
+</body>
+</html>

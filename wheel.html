@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Spin the Wheel</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .wheel-wrap { position: relative; width: min(420px, 90vw); margin: 20px auto 10px; }
+  canvas#wheel-canvas { width: 100%; height: auto; display: block; }
+  .pointer {
+    position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent;
+    border-top: 28px solid var(--maroon); z-index: 5;
+  }
+  textarea#segments-input {
+    width: 100%; max-width: 500px; min-height: 140px; font-family: inherit; font-size: 1rem;
+    padding: 12px; border-radius: 10px; border: 2px solid #e8c98a; resize: vertical;
+  }
+  .two-col { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; align-items: flex-start; margin-top: 10px; width: 100%; max-width: 1000px; }
+  .col { flex: 1; min-width: 300px; text-align: center; }
+  .result-banner {
+    font-size: 1.6rem; font-weight: 900; color: var(--maroon); min-height: 2em; margin-top: 10px;
+  }
+  .preset-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; Hub</a></div>
+<div class="page">
+  <h1 class="title">🎡 Spin the Wheel</h1>
+  <p class="subtitle">Use it to randomly pick a team, choose who answers next, or hand out a surprise bonus.</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <canvas id="wheel-canvas" width="420" height="420"></canvas>
+      </div>
+      <button class="btn" id="spin-btn">Spin!</button>
+      <div class="result-banner" id="result-banner"></div>
+    </div>
+    <div class="col">
+      <h3>Wheel Options (one per line)</h3>
+      <textarea id="segments-input"></textarea>
+      <div class="preset-row">
+        <button class="btn small secondary" id="load-teams-btn">Load Current Teams</button>
+        <button class="btn small ghost" id="load-bonus-btn">Load Bonus Preset</button>
+        <button class="btn small" id="apply-btn">Update Wheel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/scoreboard.js"></script>
+<script src="js/wheel.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wisdom Quiz Show</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 10px;
+  }
+  .cat-header {
+    background: var(--maroon);
+    color: var(--gold);
+    font-weight: 800;
+    text-align: center;
+    padding: 12px 6px;
+    border-radius: 10px;
+    font-size: 1rem;
+    min-height: 3.4em;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cell {
+    background: var(--saffron);
+    color: white;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 22px 6px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .cell:hover { background: var(--saffron-dark); transform: translateY(-2px); }
+  .cell.used { background: #d8c9b3; color: #d8c9b3; cursor: default; box-shadow: none; }
+  .cell.used:hover { transform: none; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(58, 36, 22, 0.75);
+    align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--cream);
+    border-radius: var(--radius);
+    padding: 34px;
+    max-width: 720px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  .modal .pts { font-size: 1.1rem; color: var(--maroon-dark); font-weight: 700; margin-bottom: 6px; }
+  .modal .question { font-size: 1.6rem; color: var(--ink); margin: 14px 0 20px; }
+  .modal .answer { font-size: 1.3rem; color: var(--green-ok); font-weight: 700; min-height: 1.6em; margin-bottom: 20px; display:none; }
+  .modal .answer.shown { display: block; }
+  .award-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; Hub</a></div>
+<div class="page">
+  <h1 class="title">❓ Wisdom Quiz Show</h1>
+  <p class="subtitle">Pick a category and point value. Read the question aloud &mdash; the first team to answer correctly wins the points!</p>
+
+  <div class="board" id="board"></div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="pts" id="modal-pts"></div>
+    <div class="question" id="modal-question"></div>
+    <button class="btn" id="reveal-btn">Reveal Answer</button>
+    <div class="answer" id="modal-answer"></div>
+    <div class="award-row" id="award-row"></div>
+    <div style="margin-top:18px;">
+      <button class="btn ghost" id="close-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="data/quiz-data.js"></script>
+<script src="js/scoreboard.js"></script>
+<script src="js/quiz.js"></script>
+</body>
+</html>

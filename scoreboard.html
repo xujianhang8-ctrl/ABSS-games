@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Team Scoreboard</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .team-manage-list { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+  .team-row {
+    display: flex; align-items: center; gap: 12px;
+    background: #fff3dc; border-radius: 14px; padding: 12px 16px;
+  }
+  .team-row input[type="text"] {
+    flex: 1; font-size: 1.1rem; padding: 8px 10px; border-radius: 8px;
+    border: 2px solid #e8c98a; font-family: inherit;
+  }
+  .team-row input[type="color"] { width: 42px; height: 42px; border: none; background: none; cursor: pointer; }
+  .team-row .score-display { font-size: 1.6rem; font-weight: 800; color: var(--maroon); min-width: 2.4em; text-align: center; }
+  .big-scores { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
+  .big-score-card {
+    background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 24px 30px; text-align: center; min-width: 160px; border-top: 8px solid var(--gold);
+  }
+  .big-score-card .name { font-size: 1.3rem; font-weight: 700; color: var(--maroon); }
+  .big-score-card .score { font-size: 3rem; font-weight: 900; color: var(--saffron-dark); }
+  .actions-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+</style>
+</head>
+<body>
+<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; Hub</a></div>
+<div class="page">
+  <h1 class="title">🏆 Team Scoreboard</h1>
+  <p class="subtitle">Set up your teams before class, or switch to Big Display mode to show final scores at the end of the lesson.</p>
+
+  <div class="panel">
+    <h2>Manage Teams</h2>
+    <div class="team-manage-list" id="team-list"></div>
+    <div class="actions-row">
+      <button class="btn" id="add-team-btn">+ Add Team</button>
+      <button class="btn secondary" id="reset-scores-btn">Reset All Scores</button>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:24px;">
+    <h2>Big Display Mode</h2>
+    <div class="big-scores" id="big-scores"></div>
+  </div>
+</div>
+<script src="js/scoreboard.js"></script>
+<script>
+  function renderManage() {
+    const list = document.getElementById("team-list");
+    const big = document.getElementById("big-scores");
+    const teams = AbssScoreboard.getTeams();
+    list.innerHTML = "";
+    big.innerHTML = "";
+    teams.forEach((t) => {
+      const row = document.createElement("div");
+      row.className = "team-row";
+      row.innerHTML = `
+        <input type="color" value="${t.color}" data-id="${t.id}" class="color-input" />
+        <input type="text" value="${t.name}" data-id="${t.id}" class="name-input" />
+        <button class="btn small" data-id="${t.id}" data-delta="-1">−1</button>
+        <span class="score-display">${t.score}</span>
+        <button class="btn small" data-id="${t.id}" data-delta="1">+1</button>
+        <button class="btn small secondary remove-btn" data-id="${t.id}">Remove</button>
+      `;
+      list.appendChild(row);
+
+      const card = document.createElement("div");
+      card.className = "big-score-card";
+      card.style.borderTopColor = t.color;
+      card.innerHTML = `<div class="name">${t.name}</div><div class="score">${t.score}</div>`;
+      big.appendChild(card);
+    });
+
+    list.querySelectorAll(".name-input").forEach((inp) => {
+      inp.addEventListener("change", () => {
+        AbssScoreboard.renameTeam(inp.dataset.id, inp.value);
+        renderManage();
+      });
+    });
+    list.querySelectorAll(".color-input").forEach((inp) => {
+      inp.addEventListener("change", () => {
+        const teams = AbssScoreboard.getTeams();
+        const t = teams.find((x) => x.id === inp.dataset.id);
+        if (t) {
+          t.color = inp.value;
+          localStorage.setItem("abss_teams_v1", JSON.stringify(teams));
+        }
+        AbssScoreboard.renderAll();
+        renderManage();
+      });
+    });
+    list.querySelectorAll("button[data-delta]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        AbssScoreboard.addPoints(btn.dataset.id, parseInt(btn.dataset.delta, 10));
+        renderManage();
+      });
+    });
+    list.querySelectorAll(".remove-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        AbssScoreboard.removeTeam(btn.dataset.id);
+        renderManage();
+      });
+    });
+  }
+
+  document.getElementById("add-team-btn").addEventListener("click", () => {
+    const name = prompt("Team name?", "New Team");
+    if (name) {
+      AbssScoreboard.addTeam(name);
+      renderManage();
+    }
+  });
+  document.getElementById("reset-scores-btn").addEventListener("click", () => {
+    if (confirm("Reset all team scores to 0?")) {
+      AbssScoreboard.resetScores();
+      renderManage();
+    }
+  });
+
+  renderManage();
+</script>
+</body>
+</html>
