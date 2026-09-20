@@ -1,5 +1,6 @@
 (() => {
   const N = TIMELINE_DATA.length;
+  const STORAGE_KEY = "abss_timeline_state_v1";
   let placed = new Array(N).fill(null); // slot index -> original data index
   let bankOrder = [];
   let checked = false;
@@ -10,6 +11,19 @@
   const resetBtn = document.getElementById("reset-btn");
   const reshuffleBtn = document.getElementById("reshuffle-btn");
   const awardRow = document.getElementById("award-row");
+
+  function loadState() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (!parsed || !Array.isArray(parsed.placed) || parsed.placed.length !== N || !Array.isArray(parsed.bankOrder)) return null;
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ placed, bankOrder, checked }));
+  }
 
   function shuffle(arr) {
     const a = arr.slice();
@@ -25,6 +39,7 @@
     placed = new Array(N).fill(null);
     checked = false;
     awardRow.innerHTML = "";
+    saveState();
     render();
   }
 
@@ -51,6 +66,7 @@
             if (checked) return;
             bankOrder.push(dataIdx);
             placed[slotIdx] = null;
+            saveState();
             render();
           });
         }
@@ -71,6 +87,7 @@
         if (emptySlot === -1) return;
         placed[emptySlot] = dataIdx;
         bankOrder = bankOrder.filter((x) => x !== dataIdx);
+        saveState();
         render();
       });
       bankEl.appendChild(card);
@@ -83,6 +100,7 @@
     if (placed.includes(null)) return;
     checked = true;
     const correctCount = placed.filter((dataIdx, slotIdx) => dataIdx === slotIdx).length;
+    saveState();
     render();
     buildAwardRow(correctCount);
   }
@@ -110,9 +128,22 @@
     placed = new Array(N).fill(null);
     checked = false;
     awardRow.innerHTML = "";
+    saveState();
     render();
   });
   reshuffleBtn.addEventListener("click", newShuffle);
 
-  newShuffle();
+  const saved = loadState();
+  if (saved) {
+    placed = saved.placed;
+    bankOrder = saved.bankOrder;
+    checked = !!saved.checked;
+    render();
+    if (checked) {
+      const correctCount = placed.filter((dataIdx, slotIdx) => dataIdx === slotIdx).length;
+      buildAwardRow(correctCount);
+    }
+  } else {
+    newShuffle();
+  }
 })();

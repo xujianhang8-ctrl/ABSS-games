@@ -1,4 +1,5 @@
 (() => {
+  const STORAGE_KEY = "abss_wheel_segments_v1";
   const canvas = document.getElementById("wheel-canvas");
   const ctx = canvas.getContext("2d");
   const segmentsInput = document.getElementById("segments-input");
@@ -88,6 +89,7 @@
     segments = getSegmentsFromInput();
     rotation = 0;
     resultBanner.textContent = "";
+    localStorage.setItem(STORAGE_KEY, segmentsInput.value);
     drawWheel();
   }
 
@@ -141,7 +143,12 @@
   applyBtn.addEventListener("click", applySegments);
   spinBtn.addEventListener("click", spin);
 
-  const teams = AbssScoreboard.getTeams();
-  segmentsInput.value = teams.map((t) => t.name).join("\n");
+  const savedText = localStorage.getItem(STORAGE_KEY);
+  if (savedText !== null) {
+    segmentsInput.value = savedText;
+  } else {
+    const teams = AbssScoreboard.getTeams();
+    segmentsInput.value = teams.map((t) => t.name).join("\n");
+  }
   applySegments();
 })();

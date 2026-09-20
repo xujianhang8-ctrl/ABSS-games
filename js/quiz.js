@@ -11,13 +11,13 @@
 
   function loadUsed() {
     try {
-      return JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || [];
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch (e) {
       return [];
     }
   }
   function saveUsed(used) {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(used));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(used));
   }
 
   let used = loadUsed();

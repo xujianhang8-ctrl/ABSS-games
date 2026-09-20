@@ -1,6 +1,23 @@
 (() => {
-  let order = TRUEFALSE_DATA.map((_, i) => i);
-  let idx = 0;
+  const STORAGE_KEY = "abss_truefalse_state_v1";
+
+  function loadState() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (!parsed || !Array.isArray(parsed.order) || parsed.order.length !== TRUEFALSE_DATA.length) return null;
+      if (typeof parsed.idx !== "number" || parsed.idx < 0 || parsed.idx >= parsed.order.length) return null;
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ order, idx }));
+  }
+
+  const saved = loadState();
+  let order = saved ? saved.order : TRUEFALSE_DATA.map((_, i) => i);
+  let idx = saved ? saved.idx : 0;
   let answered = false;
 
   const counter = document.getElementById("counter");
@@ -53,17 +70,20 @@
   falseBtn.addEventListener("click", () => answer(false));
   nextBtn.addEventListener("click", () => {
     idx = (idx + 1) % order.length;
+    saveState();
     render();
   });
   prevBtn.addEventListener("click", () => {
     if (idx > 0) {
       idx -= 1;
+      saveState();
       render();
     }
   });
   shuffleBtn.addEventListener("click", () => {
     order = shuffle(order);
     idx = 0;
+    saveState();
     render();
   });
 

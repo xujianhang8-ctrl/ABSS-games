@@ -36,8 +36,8 @@
   .award-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
 </style>
 </head>
-<body>
-<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; 返回首页</a></div>
+<body data-page="timeline">
+<div id="site-nav"></div>
 <div class="page">
   <h1 class="title">📜 佛陀生平时间轴</h1>
   <p class="subtitle">按照你认为正确的顺序点击下面的事件。全班达成一致后，检查顺序是否正确！</p>
@@ -55,6 +55,8 @@
 
 <script src="data/timeline-data.js"></script>
 <script src="js/scoreboard.js"></script>
+<script src="js/save.js"></script>
+<script src="js/nav.js"></script>
 <script src="js/timeline.js"></script>
 </body>
 </html>

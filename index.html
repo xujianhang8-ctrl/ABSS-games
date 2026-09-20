@@ -6,10 +6,13 @@
 <title>佛学课堂游戏中心</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-page="home">
+<div id="site-nav"></div>
 <div class="page">
   <h1 class="title">🪷 佛学课堂游戏中心 🪷</h1>
   <p class="subtitle">选择一个游戏，和全班同学一起玩吧。分数会在每个游戏之间累计——请留意屏幕底部的计分栏。</p>
+
+  <div class="standings-preview" id="standings-preview"></div>
 
   <div class="game-grid">
     <a class="game-card" href="quiz.html">
@@ -39,8 +42,35 @@
     </a>
   </div>
 
-  <footer class="hint">小提示：在教室的电脑上打开此页面并投影出来——不需要联网。</footer>
+  <footer class="hint">小提示：在教室的电脑上打开此页面并投影出来——不需要联网。所有进度都会自动保存在本浏览器中；点击右上角「⋮ 更多」菜单，还可以把存档导出成文件，方便换电脑或下节课继续使用。</footer>
 </div>
 <script src="js/scoreboard.js"></script>
+<script src="js/save.js"></script>
+<script src="js/nav.js"></script>
+<script>
+  (() => {
+    const el = document.getElementById("standings-preview");
+    function render() {
+      const teams = AbssScoreboard.getTeams().slice().sort((a, b) => b.score - a.score);
+      el.innerHTML = teams
+        .map(
+          (t, i) => `
+        <div class="standing-chip">
+          <span class="rank">#${i + 1}</span>
+          <span class="dot" style="background:${t.color}"></span>
+          <span>${t.name}</span>
+          <span class="score">${t.score} 分</span>
+        </div>`
+        )
+        .join("");
+    }
+    render();
+    document.addEventListener("click", (e) => {
+      if (e.target.closest("#scoreboard-bar .sb-adj")) {
+        setTimeout(render, 0);
+      }
+    });
+  })();
+</script>
 </body>
 </html>

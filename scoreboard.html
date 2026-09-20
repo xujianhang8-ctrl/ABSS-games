@@ -27,8 +27,8 @@
   .actions-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
 </style>
 </head>
-<body>
-<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; 返回首页</a></div>
+<body data-page="scoreboard">
+<div id="site-nav"></div>
 <div class="page">
   <h1 class="title">🏆 队伍计分板</h1>
   <p class="subtitle">课前设置好各队伍，或切换到"大屏显示模式"，在课程结束时展示最终分数。</p>
@@ -46,8 +46,20 @@
     <h2>大屏显示模式</h2>
     <div class="big-scores" id="big-scores"></div>
   </div>
+
+  <div class="panel" style="margin-top:24px;">
+    <h2>备份与恢复</h2>
+    <p class="subtitle" style="margin:0 0 14px;">把队伍分数和各个游戏的进度保存成一个文件，方便换电脑上课、下节课接着玩，或者防止浏览器缓存被清空后数据丢失。</p>
+    <div class="actions-row">
+      <button class="btn" id="export-save-btn">💾 导出存档文件</button>
+      <button class="btn secondary" id="import-save-btn">📂 导入存档文件</button>
+      <input type="file" id="import-save-input" accept="application/json" hidden />
+    </div>
+  </div>
 </div>
 <script src="js/scoreboard.js"></script>
+<script src="js/save.js"></script>
+<script src="js/nav.js"></script>
 <script>
   function renderManage() {
     const list = document.getElementById("team-list");
@@ -119,6 +131,25 @@
       AbssScoreboard.resetScores();
       renderManage();
     }
+  });
+
+  document.getElementById("export-save-btn").addEventListener("click", () => {
+    AbssSave.exportToFile();
+  });
+  const importInput = document.getElementById("import-save-input");
+  document.getElementById("import-save-btn").addEventListener("click", () => importInput.click());
+  importInput.addEventListener("change", () => {
+    const file = importInput.files[0];
+    if (!file) return;
+    AbssSave.importFromFile(file, (err) => {
+      if (err) {
+        alert("导入失败：文件内容不是有效的存档格式。");
+      } else {
+        alert("导入成功！页面即将刷新。");
+        location.reload();
+      }
+    });
+    importInput.value = "";
   });
 
   renderManage();
