@@ -32,6 +32,35 @@ Team scores are shared across all games (saved in the browser's local
 storage), so points earned in the quiz carry over into the true/false round,
 timeline, etc.
 
+## Saving & the in-game menu
+
+Every page has a **☰ menu button** in the top-right corner with:
+
+- **Resume** — close the menu and keep playing.
+- **Restart This Game** — clears just that game's progress (useful if a
+  team wants a do-over, or you're starting a fresh round).
+- **Game Hub** / **Scoreboard** — quick navigation.
+- **Save to File** — downloads a `.json` save file with your teams, scores,
+  and progress in every game.
+- **Load From File** — restores teams/scores/progress from a save file you
+  downloaded earlier (handy for moving to a different computer, or backing
+  up before the school year ends).
+- **Reset Everything** — wipes all teams, scores, and progress to start
+  completely fresh.
+
+Progress is saved automatically in the browser as you play (using
+`localStorage`), so closing the tab or refreshing mid-game won't lose your
+place — the quiz board remembers which questions were used, the true/false
+round remembers which statement you're on, and the timeline remembers your
+current arrangement.
+
+On the hub (`index.html`), each game card shows a small badge (e.g. "3/20
+played", "In progress", "Completed") so you can see at a glance where you
+left off. The **"Start New Weekly Session"** button on the hub clears every
+game's progress for a clean board next week, while keeping your team names,
+colors, and scores intact. The hub also has its own **Save to File** /
+**Load From File** buttons, identical to the ones in the in-game menu.
+
 ## Customizing content for future weeks
 
 All question/content banks are plain JS data files, easy to edit without

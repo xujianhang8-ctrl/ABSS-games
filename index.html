@@ -9,25 +9,32 @@
 <body>
 <div class="page">
   <h1 class="title">🪷 Buddhism Class Game Hub 🪷</h1>
-  <p class="subtitle">Pick a game to play together as a class. Scores follow your teams across every game — check the bar at the bottom of the screen.</p>
+  <p class="subtitle">Pick a game to play together as a class. Scores and progress are saved automatically and follow your teams across every game — check the bar at the bottom of the screen.</p>
 
-  <div class="game-grid">
-    <a class="game-card" href="quiz.html">
+  <div class="hub-toolbar">
+    <button class="btn secondary small" id="new-session-btn">🗓 Start New Weekly Session</button>
+    <button class="btn ghost small" id="export-btn">⬇ Save to File</button>
+    <button class="btn ghost small" id="import-btn">⬆ Load From File</button>
+    <input type="file" id="import-input" accept="application/json" style="display:none" />
+  </div>
+
+  <div class="game-grid" id="game-grid">
+    <a class="game-card" href="quiz.html" data-game="quiz">
       <div class="icon">❓</div>
       <h3>Wisdom Quiz Show</h3>
       <p>Jeopardy-style board. Pick a category and points, teams buzz in to answer.</p>
     </a>
-    <a class="game-card" href="truefalse.html">
+    <a class="game-card" href="truefalse.html" data-game="truefalse">
       <div class="icon">⚡</div>
       <h3>True or False Lightning Round</h3>
       <p>Fast-paced statements about Buddha and his teachings. True or false?</p>
     </a>
-    <a class="game-card" href="timeline.html">
+    <a class="game-card" href="timeline.html" data-game="timeline">
       <div class="icon">📜</div>
       <h3>Buddha's Life Timeline</h3>
       <p>Put the key events of Buddha's life in the correct order together.</p>
     </a>
-    <a class="game-card" href="wheel.html">
+    <a class="game-card" href="wheel.html" data-game="wheel">
       <div class="icon">🎡</div>
       <h3>Spin the Wheel</h3>
       <p>Pick a team at random, hand out bonus points, or choose who answers next.</p>
@@ -39,8 +46,82 @@
     </a>
   </div>
 
-  <footer class="hint">Tip: open this on the classroom laptop and project it &mdash; no internet connection needed.</footer>
+  <footer class="hint">Tip: open this on the classroom laptop and project it &mdash; no internet connection needed. Your progress is saved in this browser — use "Save to File" to back it up or move it to another computer.</footer>
 </div>
 <script src="js/scoreboard.js"></script>
+<script src="js/gamestate.js"></script>
+<script>
+  const QUIZ_TOTAL_CELLS = 20;
+
+  function badgeFor(gameKey) {
+    const state = AbssState.load(gameKey);
+    if (gameKey === "quiz") {
+      const used = (state && state.used) ? state.used.length : 0;
+      if (used === 0) return null;
+      if (used >= QUIZ_TOTAL_CELLS) return { text: "Completed", cls: "completed" };
+      return { text: `${used}/${QUIZ_TOTAL_CELLS} played`, cls: "in-progress" };
+    }
+    if (gameKey === "truefalse") {
+      const answered = (state && state.answeredPositions) ? state.answeredPositions.length : 0;
+      if (answered === 0) return null;
+      const total = (state && state.order) ? state.order.length : answered;
+      if (answered >= total) return { text: "Completed", cls: "completed" };
+      return { text: `${answered}/${total} answered`, cls: "in-progress" };
+    }
+    if (gameKey === "timeline") {
+      if (!state) return null;
+      if (state.checked) return { text: "Checked", cls: "completed" };
+      const placedCount = (state.placed || []).filter((x) => x !== null).length;
+      if (placedCount === 0) return null;
+      return { text: "In progress", cls: "in-progress" };
+    }
+    if (gameKey === "wheel") {
+      if (state && state.text) return { text: "Customized", cls: "in-progress" };
+      return null;
+    }
+    return null;
+  }
+
+  function renderBadges() {
+    document.querySelectorAll(".game-card[data-game]").forEach((card) => {
+      const existing = card.querySelector(".progress-badge");
+      if (existing) existing.remove();
+      const badge = badgeFor(card.dataset.game);
+      if (badge) {
+        const span = document.createElement("span");
+        span.className = "progress-badge " + badge.cls;
+        span.textContent = badge.text;
+        card.appendChild(span);
+      }
+    });
+  }
+
+  document.getElementById("new-session-btn").addEventListener("click", () => {
+    if (confirm("Start a new weekly session? This clears game progress (quiz board, true/false, timeline, wheel) but keeps your team names, colors and scores.")) {
+      AbssState.clearAllProgress();
+      renderBadges();
+    }
+  });
+  document.getElementById("export-btn").addEventListener("click", () => {
+    AbssState.downloadSave();
+  });
+  const importInput = document.getElementById("import-input");
+  document.getElementById("import-btn").addEventListener("click", () => importInput.click());
+  importInput.addEventListener("change", () => {
+    const file = importInput.files[0];
+    if (!file) return;
+    AbssState.loadSaveFromFile(file, (success) => {
+      if (success) {
+        alert("Save loaded! The page will now reload.");
+        location.reload();
+      } else {
+        alert("Sorry, that file could not be read as a save file.");
+      }
+      importInput.value = "";
+    });
+  });
+
+  renderBadges();
+</script>
 </body>
 </html>

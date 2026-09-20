@@ -129,19 +129,35 @@
     resultBanner.textContent = "🎉 " + segments[winnerIdx] + " 🎉";
   }
 
+  function persistSegments() {
+    AbssState.save("wheel", { text: segmentsInput.value });
+  }
+
   loadTeamsBtn.addEventListener("click", () => {
     const teams = AbssScoreboard.getTeams();
     segmentsInput.value = teams.map((t) => t.name).join("\n");
     applySegments();
+    persistSegments();
   });
   loadBonusBtn.addEventListener("click", () => {
     segmentsInput.value = BONUS_PRESET.join("\n");
     applySegments();
+    persistSegments();
   });
-  applyBtn.addEventListener("click", applySegments);
+  applyBtn.addEventListener("click", () => {
+    applySegments();
+    persistSegments();
+  });
   spinBtn.addEventListener("click", spin);
 
-  const teams = AbssScoreboard.getTeams();
-  segmentsInput.value = teams.map((t) => t.name).join("\n");
+  const savedWheel = AbssState.load("wheel");
+  if (savedWheel && typeof savedWheel.text === "string" && savedWheel.text.trim().length > 0) {
+    segmentsInput.value = savedWheel.text;
+  } else {
+    const teams = AbssScoreboard.getTeams();
+    segmentsInput.value = teams.map((t) => t.name).join("\n");
+  }
   applySegments();
+
+  AbssMenu.init({ gameKey: "wheel", gameLabel: "Spin the Wheel" });
 })();
