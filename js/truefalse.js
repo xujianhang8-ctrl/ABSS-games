@@ -24,7 +24,7 @@
 
   function render() {
     const item = TRUEFALSE_DATA[order[idx]];
-    counter.textContent = `Statement ${idx + 1} of ${order.length}`;
+    counter.textContent = `第 ${idx + 1} 题，共 ${order.length} 题`;
     statement.textContent = item.s;
     result.textContent = "";
     result.className = "result";
@@ -40,11 +40,11 @@
     answered = true;
     const item = TRUEFALSE_DATA[order[idx]];
     const correct = choice === item.a;
-    result.textContent = correct ? "Correct! 🎉" : "Not quite!";
+    result.textContent = correct ? "答对了！🎉" : "不太对哦！";
     result.className = "result " + (correct ? "correct-text" : "wrong-text");
     explain.textContent = item.a
-      ? (item.explain || "That statement is TRUE.")
-      : (item.explain || "That statement is FALSE.");
+      ? (item.explain || "这句话是对的。")
+      : (item.explain || "这句话是错的。");
     trueBtn.disabled = true;
     falseBtn.disabled = true;
   }

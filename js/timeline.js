@@ -91,14 +91,14 @@
     awardRow.innerHTML = "";
     const label = document.createElement("div");
     label.className = "pill";
-    label.textContent = `${correctCount} of ${N} in the correct spot`;
+    label.textContent = `共 ${N} 项，${correctCount} 项顺序正确`;
     awardRow.appendChild(label);
     const teams = AbssScoreboard.getTeams();
     teams.forEach((t) => {
       const btn = document.createElement("button");
       btn.className = "btn small";
       btn.style.background = t.color;
-      btn.textContent = `Award ${t.name} +${correctCount}`;
+      btn.textContent = `为 ${t.name} 加 ${correctCount} 分`;
       btn.addEventListener("click", () => AbssScoreboard.addPoints(t.id, correctCount));
       awardRow.appendChild(btn);
     });

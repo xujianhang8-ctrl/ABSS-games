@@ -62,7 +62,7 @@
     const cat = QUIZ_DATA.categories[catIdx];
     const q = cat.questions[qIdx];
     currentKey = cellKey(catIdx, qIdx);
-    modalPts.textContent = `${cat.name} — ${q.points} points`;
+    modalPts.textContent = `${cat.name} — ${q.points} 分`;
     modalQuestion.textContent = q.q;
     modalAnswer.textContent = q.a;
     modalAnswer.classList.remove("shown");
@@ -78,7 +78,7 @@
       const btn = document.createElement("button");
       btn.className = "btn small";
       btn.style.background = t.color;
-      btn.textContent = `${t.name} +${points}`;
+      btn.textContent = `${t.name} +${points} 分`;
       btn.addEventListener("click", () => {
         AbssScoreboard.addPoints(t.id, points);
         markUsedAndClose();
@@ -87,7 +87,7 @@
     });
     const noneBtn = document.createElement("button");
     noneBtn.className = "btn small ghost";
-    noneBtn.textContent = "No one got it";
+    noneBtn.textContent = "没有队伍答对";
     noneBtn.addEventListener("click", markUsedAndClose);
     awardRow.appendChild(noneBtn);
   }

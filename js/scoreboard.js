@@ -1,8 +1,8 @@
 const AbssScoreboard = (() => {
   const STORAGE_KEY = "abss_teams_v1";
   const DEFAULT_TEAMS = [
-    { id: "t1", name: "Team Lotus", score: 0, color: "#e8912d" },
-    { id: "t2", name: "Team Bodhi", score: 0, color: "#4caf6b" },
+    { id: "t1", name: "莲花队", score: 0, color: "#e8912d" },
+    { id: "t2", name: "菩提队", score: 0, color: "#4caf6b" },
   ];
 
   function load() {
@@ -39,7 +39,7 @@ const AbssScoreboard = (() => {
   function addTeam(name, color) {
     const teams = load();
     const id = "t" + (Date.now() % 100000);
-    teams.push({ id, name: name || "New Team", score: 0, color: color || randomColor() });
+    teams.push({ id, name: name || "新队伍", score: 0, color: color || randomColor() });
     save(teams);
     renderAll();
   }
@@ -96,9 +96,9 @@ const AbssScoreboard = (() => {
       el.innerHTML = `
         <span class="sb-dot" style="background:${t.color}"></span>
         <span class="sb-name">${escapeHtml(t.name)}</span>
-        <button class="sb-adj" data-id="${t.id}" data-delta="-1" title="Subtract point">−</button>
+        <button class="sb-adj" data-id="${t.id}" data-delta="-1" title="减一分">−</button>
         <span class="sb-score">${t.score}</span>
-        <button class="sb-adj" data-id="${t.id}" data-delta="1" title="Add point">+</button>
+        <button class="sb-adj" data-id="${t.id}" data-delta="1" title="加一分">+</button>
       `;
       container.appendChild(el);
     });
@@ -107,7 +107,7 @@ const AbssScoreboard = (() => {
     manageLink.className = "btn small ghost sb-manage";
     manageLink.style.color = "#fff8ec";
     manageLink.style.borderColor = "#fff8ec";
-    manageLink.textContent = "Manage Teams";
+    manageLink.textContent = "管理队伍";
     container.appendChild(manageLink);
 
     container.querySelectorAll(".sb-adj").forEach((btn) => {

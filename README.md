@@ -1,46 +1,47 @@
-# ABSS Buddhism Class Game Hub
+# ABSS 佛学课堂游戏中心（中文版）
 
-A small, offline, browser-based set of games for a weekly Buddhism class
-(ages 9-12, ~10-15 students, one shared screen/projector). Split the class
-into 2-4 teams and play for 30-40 minutes.
+一套小巧、离线、基于浏览器的游戏，用于每周的佛学课堂（9-12 岁学生，约
+10-15 人，使用一块共享屏幕/投影仪）。把全班分成 2-4 个队伍，一起玩
+30-40 分钟。
 
-## How to run it
+本分支是英文版游戏（`main`/`claude/tender-heisenberg-5vtzc2` 分支）的
+中文翻译版本，游戏逻辑和结构完全相同，只是界面文字、题库内容全部翻译
+成了简体中文。
 
-No installation, no internet connection, no build step required.
+## 如何运行
 
-- **Simplest:** double-click `index.html` to open it in a browser.
-- **Recommended for class:** serve the folder so relative links behave
-  consistently, e.g. from this folder run `python3 -m http.server 8000`
-  and open `http://localhost:8000` on the classroom laptop, then project it.
+不需要安装任何软件，不需要联网，也不需要构建步骤。
 
-## What's included
+- **最简单的方式：** 直接双击 `index.html`，用浏览器打开即可。
+- **课堂推荐方式：** 在本文件夹下用命令行运行一个简单的本地服务器，例如
+  `python3 -m http.server 8000`，然后在教室电脑上打开
+  `http://localhost:8000`，再投影到大屏幕。
 
-- **`index.html`** — the hub/menu to launch any game.
-- **`scoreboard.html`** — set up team names/colors before class, or switch
-  to "Big Display Mode" to show final scores at the end. A scoreboard bar
-  is pinned to the bottom of every game so you can award points anywhere.
-- **`quiz.html`** — a Jeopardy-style board (4 categories × 5 point values)
-  covering Buddha's life and core teachings.
-- **`truefalse.html`** — a fast true/false lightning round; teams shout an
-  answer, click the one they agree on.
-- **`timeline.html`** — students place 10 key events of Buddha's life in
-  order; checks the order and shows a short note for each event.
-- **`wheel.html`** — a spinning wheel to randomly pick a team/turn order,
-  or hand out a bonus (editable list, plus presets for teams and bonuses).
+## 包含的内容
 
-Team scores are shared across all games (saved in the browser's local
-storage), so points earned in the quiz carry over into the true/false round,
-timeline, etc.
+- **`index.html`** — 游戏中心/主菜单，用于打开任意一个游戏。
+- **`scoreboard.html`** — 课前设置队伍名称/颜色，或切换到"大屏显示模式"
+  在课程结束时展示最终分数。每个游戏页面底部都固定有一个计分栏，方便
+  随时加分。
+- **`quiz.html`** — 类似"危险边缘"的问答板（4 个类别 × 5 个分值），
+  涵盖佛陀的生平与核心教导。
+- **`truefalse.html`** — 快节奏的是非问答；各队喊出答案，点击大家一致
+  同意的选项。
+- **`timeline.html`** — 学生把佛陀一生中的 10 个重要事件按顺序排列；
+  可以检查顺序，并为每个事件展示简短说明。
+- **`wheel.html`** — 一个旋转转盘，用来随机抽选队伍/决定发言顺序，或
+  发放额外奖励（选项可编辑，并提供队伍/奖励两种预设）。
 
-## Customizing content for future weeks
+各队的分数会在所有游戏之间共享（保存在浏览器本地存储中），因此在问答
+游戏中获得的分数会自动带入是非快答、时间轴游戏等。
 
-All question/content banks are plain JS data files, easy to edit without
-touching any game logic:
+## 为未来的课程自定义内容
 
-- `data/quiz-data.js` — quiz categories and questions
-- `data/truefalse-data.js` — true/false statements
-- `data/timeline-data.js` — timeline events (order matters — this is the
-  "correct" answer key)
+所有题库内容都保存在纯 JS 数据文件中，方便修改，无需改动游戏逻辑代码：
 
-Just open the file, edit the text between the quotes, save, and refresh
-the browser — no build step needed.
+- `data/quiz-data.js` — 问答游戏的类别和题目
+- `data/truefalse-data.js` — 是非题的句子
+- `data/timeline-data.js` — 时间轴事件（顺序很重要——这就是"正确答案"）
+
+只需打开文件，修改引号中的文字，保存后刷新浏览器即可——不需要任何
+构建步骤。

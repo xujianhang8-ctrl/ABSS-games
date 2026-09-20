@@ -9,14 +9,14 @@
   const applyBtn = document.getElementById("apply-btn");
 
   const BONUS_PRESET = [
-    "+5 Bonus Points",
-    "+10 Bonus Points",
-    "Lose a Turn",
-    "Free Pass",
-    "+3 Bonus Points",
-    "Double Points Next Question",
-    "+5 Bonus Points",
-    "Nothing — Try Again Next Round",
+    "加 5 分",
+    "加 10 分",
+    "跳过一轮",
+    "免答一次",
+    "加 3 分",
+    "下一题双倍得分",
+    "加 5 分",
+    "什么都没有——下一轮再试",
   ];
 
   const COLORS = ["#e8912d", "#7a2e2e", "#4caf6b", "#5b8def", "#c9527a", "#8b5fbf", "#f2c14e", "#3a8a8a"];
@@ -47,7 +47,7 @@
       ctx.fillStyle = "#5a4a3c";
       ctx.font = "bold 18px Trebuchet MS";
       ctx.textAlign = "center";
-      ctx.fillText("Add some options →", cx, cy);
+      ctx.fillText("请先添加选项 →", cx, cy);
       return;
     }
     const anglePer = (Math.PI * 2) / n;

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Spin the Wheel</title>
+<title>幸运转盘</title>
 <link rel="stylesheet" href="styles.css" />
 <style>
   .wheel-wrap { position: relative; width: min(420px, 90vw); margin: 20px auto 10px; }
@@ -26,10 +26,10 @@
 </style>
 </head>
 <body>
-<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; Hub</a></div>
+<div class="top-nav"><a href="index.html" class="btn ghost small">&larr; 返回首页</a></div>
 <div class="page">
-  <h1 class="title">🎡 Spin the Wheel</h1>
-  <p class="subtitle">Use it to randomly pick a team, choose who answers next, or hand out a surprise bonus.</p>
+  <h1 class="title">🎡 幸运转盘</h1>
+  <p class="subtitle">用它来随机抽选队伍、决定下一个回答问题的人，或发放一个惊喜奖励。</p>
 
   <div class="two-col">
     <div class="col">
@@ -37,16 +37,16 @@
         <div class="pointer"></div>
         <canvas id="wheel-canvas" width="420" height="420"></canvas>
       </div>
-      <button class="btn" id="spin-btn">Spin!</button>
+      <button class="btn" id="spin-btn">开始转动！</button>
       <div class="result-banner" id="result-banner"></div>
     </div>
     <div class="col">
-      <h3>Wheel Options (one per line)</h3>
+      <h3>转盘选项（每行一项）</h3>
       <textarea id="segments-input"></textarea>
       <div class="preset-row">
-        <button class="btn small secondary" id="load-teams-btn">Load Current Teams</button>
-        <button class="btn small ghost" id="load-bonus-btn">Load Bonus Preset</button>
-        <button class="btn small" id="apply-btn">Update Wheel</button>
+        <button class="btn small secondary" id="load-teams-btn">载入当前队伍</button>
+        <button class="btn small ghost" id="load-bonus-btn">载入奖励预设</button>
+        <button class="btn small" id="apply-btn">更新转盘</button>
       </div>
     </div>
   </div>
